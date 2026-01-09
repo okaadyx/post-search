@@ -9,36 +9,12 @@ interface SearchComponentProps {
 
 const SearchComponent = ({ query, setQuery }: SearchComponentProps) => {
   return (
-    <View
-      style={{
-        height: 40,
-        width: "98%",
-        padding: 8,
-        backgroundColor: "white",
-        borderRadius: 12,
-        flexDirection: "row",
-        alignItems: "center",
-        justifyContent: "space-between",
-      }}
-    >
-      <View
-        style={{
-          flexDirection: "row",
-          alignItems: "center",
-          flex: 1,
-        }}
-      >
+    <View style={styles.container}>
+      <View style={styles.inputWrapper}>
         <Ionicons name="search" size={18} color="gray" />
 
         <TextInput
-          style={{
-            flex: 1,
-            height: 40,
-            marginLeft: 8,
-            borderRadius: 12,
-            color: "black",
-            backgroundColor: "white",
-          }}
+          style={styles.input}
           placeholder="Search here"
           placeholderTextColor="gray"
           onChangeText={setQuery}
@@ -52,4 +28,28 @@ const SearchComponent = ({ query, setQuery }: SearchComponentProps) => {
 
 export default SearchComponent;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  container: {
+    height: 40,
+    width: "98%",
+    padding: 8,
+    backgroundColor: "white",
+    borderRadius: 12,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+  },
+  inputWrapper: {
+    flexDirection: "row",
+    alignItems: "center",
+    flex: 1,
+  },
+  input: {
+    flex: 1,
+    height: 40,
+    marginLeft: 8,
+    borderRadius: 12,
+    color: "black",
+    backgroundColor: "white",
+  },
+});

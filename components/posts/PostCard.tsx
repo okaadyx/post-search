@@ -9,8 +9,10 @@ interface PostProps {
 const PostCard = ({ title, body }: PostProps) => {
   return (
     <View style={styles.card}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.body}>{body}</Text>
+      <View>
+        <Text style={styles.title}>{title}</Text>
+        <Text style={styles.body}>{body}</Text>
+      </View>
     </View>
   );
 };
