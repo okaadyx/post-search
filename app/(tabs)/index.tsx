@@ -1,98 +1,128 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
-
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import PostCard from "@/components/posts/PostCard";
+import SearchComponent from "@/components/SearchComponent";
+import useInternetStatus from "@/components/useInternetStatus";
+import { queryClient } from "@/lib/queryClient";
+import { api } from "@/services";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useQuery } from "@tanstack/react-query";
+import { useEffect, useState } from "react";
+import {
+  ActivityIndicator,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const [refreshing, setRefreshing] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+  const isOnline = useInternetStatus();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const { data, isLoading, isError } = useQuery({
+    queryKey: ["posts"],
+    queryFn: () => api.posts.fetchPosts(),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  useEffect(() => {
+    (async () => {
+      const saved = await AsyncStorage.getItem("SearchQuery");
+      if (saved) setSearchQuery(saved);
+    })();
+  }, []);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await queryClient.invalidateQueries({ queryKey: ["posts"] });
+    await AsyncStorage.removeItem("SearchQuery");
+    setSearchQuery("");
+    setRefreshing(false);
+  };
+
+  const handleSearch = async (text: string) => {
+    setSearchQuery(text);
+    await AsyncStorage.setItem("SearchQuery", text);
+  };
+
+  const filteredPosts = !searchQuery.trim()
+    ? data
+    : data?.filter(
+        (item: { title: string; body: string }) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item.body.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+
+  if (isLoading && !data) {
+    return (
+      <View style={styles.loading}>
+        <ActivityIndicator size={"large"} />
+        <Text style={{ color: "white" }}>Loading..</Text>
+      </View>
+    );
+  }
+
+  if (isError && !data) {
+    return (
+      <View style={styles.loading}>
+        <Text style={{ color: "white" }}>Something went wrong</Text>
+      </View>
+    );
+  }
+  return (
+    <SafeAreaView style={styles.container}>
+      <SearchComponent query={searchQuery} setQuery={handleSearch} />
+      {!isOnline && (
+        <View style={styles.offlineBanner}>
+          <Text style={styles.offlineText}>You’re offline</Text>
+        </View>
+      )}
+      {searchQuery && !filteredPosts.length ? (
+        <View style={styles.loading}>
+          <Text>No Posts Found</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredPosts}
+          onRefresh={onRefresh}
+          refreshing={refreshing}
+          keyExtractor={(item) => item.id.toString()}
+          renderItem={({ item }) => (
+            <PostCard title={item.title} body={item.body} />
+          )}
+          contentContainerStyle={styles.list}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
+    backgroundColor: "#F5F7FA",
+    alignItems: "center",
   },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
+  loading: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    gap: 10,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
+  list: {
+    padding: 16,
+    gap: 12,
+  },
+  offlineBanner: {
+    backgroundColor: "#FFCC00",
+    padding: 8,
+    width: "100%",
+    alignItems: "center",
+  },
+  offlineText: {
+    color: "#333",
+    fontWeight: "600",
   },
 });
