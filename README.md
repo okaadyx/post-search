@@ -62,7 +62,7 @@ This is a React Native project created with Expo. It allows users to search for 
 ## Project Structure
 
 ```
-c:\Users\Aady\Desktop\post-search\
+c:\post-search\
 ├───.gitignore
 ├───app.json
 ├───eslint.config.js
