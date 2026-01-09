@@ -48,10 +48,8 @@ export default function HomeScreen() {
 
   const filteredPosts = !searchQuery.trim()
     ? data
-    : data?.filter(
-        (item: { title: string; body: string }) =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-          item.body.toLowerCase().includes(searchQuery.toLowerCase())
+    : data?.filter((item: { title: string; body: string }) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
   if (isLoading && !data) {
