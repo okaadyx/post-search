@@ -66,7 +66,7 @@ export default function HomeScreen() {
   if (isError && !data) {
     return (
       <View style={styles.loading}>
-        <Text style={{ color: "white" }}>Something went wrong</Text>
+        <Text>Something went wrong</Text>
       </View>
     );
   }
@@ -89,11 +89,7 @@ export default function HomeScreen() {
           refreshing={refreshing}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <PostCard
-              title={item.title}
-              body={item.body}
-              isLoading={isLoading}
-            />
+            <PostCard title={item.title} body={item.body} />
           )}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
