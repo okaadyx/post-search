@@ -1,4 +1,5 @@
 import { AxiosInstance } from "axios";
+import { Post } from "./types";
 
 export default class PostsApi {
   client: AxiosInstance;
@@ -6,11 +7,7 @@ export default class PostsApi {
     this.client = client;
   }
   async fetchPosts() {
-    const { data } = await this.client.get("/posts");
-    return data;
-  }
-  async searchPosts(query: string) {
-    const { data } = await this.client.get(`/posts?q=${query}`);
+    const { data } = await this.client.get<Post>("/posts");
     return data;
   }
 }

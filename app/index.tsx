@@ -3,6 +3,7 @@ import SearchComponent from "@/components/SearchComponent";
 import useInternetStatus from "@/components/useInternetStatus";
 import { queryClient } from "@/lib/queryClient";
 import { api } from "@/services";
+import { Post } from "@/services/posts/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -46,10 +47,11 @@ export default function HomeScreen() {
     await AsyncStorage.setItem("SearchQuery", text);
   };
 
-  const filteredPosts = !searchQuery.trim()
-    ? data
-    : data?.filter((item: { title: string; body: string }) =>
-        item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPosts: Post[] | undefined = !searchQuery.trim()
+    ? (data as Post[] | undefined)
+    : (data as Post[] | undefined)?.filter(
+        (item: { title: string; body: string }) =>
+          item.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
   if (isLoading && !data) {
