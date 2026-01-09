@@ -30,7 +30,7 @@ This is a React Native project created with Expo. It allows users to search for 
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/post-search.git
+   git clone https://github.com/okaadyx/post-search.git
    ```
 2.  **Install Dependencies:**
     ```bash
