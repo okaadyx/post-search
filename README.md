@@ -28,12 +28,16 @@ This is a React Native project created with Expo. It allows users to search for 
 
 ## How to Run the Project
 
-1.  **Install Dependencies:**
+1. **Clone the repository:**
+   ```bash
+   git clone https://github.com/your-username/post-search.git
+   ```
+2.  **Install Dependencies:**
     ```bash
     npm install
     ```
 
-2.  **Run the project on different platforms:**
+3.  **Run the project on different platforms:**
 
     -   **Android:**
         ```bash
@@ -50,7 +54,7 @@ This is a React Native project created with Expo. It allows users to search for 
         npm run web
         ```
 
-3.  **Lint the project:**
+4.  **Lint the project:**
     ```bash
     npm run lint
     ```
