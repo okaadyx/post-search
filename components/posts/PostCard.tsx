@@ -4,8 +4,18 @@ import { StyleSheet, Text, View } from "react-native";
 interface PostProps {
   title: string;
   body: string;
+  isLoading: boolean;
 }
-const PostCard = ({ title, body }: PostProps) => {
+
+const SkeletonProps = {
+  colorMode: "light" as const,
+  transition: {
+    type: "decay",
+    duration: 2000,
+  },
+};
+
+const PostCard = ({ title, body, isLoading }: PostProps) => {
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{title}</Text>

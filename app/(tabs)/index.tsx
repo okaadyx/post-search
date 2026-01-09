@@ -78,7 +78,7 @@ export default function HomeScreen() {
           <Text style={styles.offlineText}>You’re offline</Text>
         </View>
       )}
-      {searchQuery && !filteredPosts.length ? (
+      {searchQuery && !filteredPosts?.length ? (
         <View style={styles.loading}>
           <Text>No Posts Found</Text>
         </View>
@@ -89,7 +89,11 @@ export default function HomeScreen() {
           refreshing={refreshing}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
-            <PostCard title={item.title} body={item.body} />
+            <PostCard
+              title={item.title}
+              body={item.body}
+              isLoading={isLoading}
+            />
           )}
           contentContainerStyle={styles.list}
           showsVerticalScrollIndicator={false}
