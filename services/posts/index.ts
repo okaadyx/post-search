@@ -9,4 +9,8 @@ export default class PostsApi {
     const { data } = await this.client.get("/posts");
     return data;
   }
+  async searchPosts(query: string) {
+    const { data } = await this.client.get(`/posts?q=${query}`);
+    return data;
+  }
 }

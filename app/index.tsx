@@ -58,7 +58,7 @@ export default function HomeScreen() {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size={"large"} />
-        <Text style={{ color: "white" }}>Loading..</Text>
+        <Text>Loading..</Text>
       </View>
     );
   }

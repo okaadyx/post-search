@@ -1,50 +1,110 @@
-# Welcome to your Expo app 👋
+# Post Search
 
-This is an [Expo](https://expo.dev) project created with [`create-expo-app`](https://www.npmjs.com/package/create-expo-app).
+This is a React Native project created with Expo. It allows users to search for posts.
 
-## Get started
+## Key Features
 
-1. Install dependencies
+- Search for posts
+- View a list of posts
+- Offline support with caching
+- Pull to refresh functionality
 
-   ```bash
-   npm install
-   ```
+## Version
 
-2. Start the app
+- **Project Version:** 1.0.0
+- **Expo Version:** ~54.0.31
+- **React Version:** 19.1.0
+- **React Native Version:** 0.81.5
 
-   ```bash
-   npx expo start
-   ```
+## Technologies Used
 
-In the output, you'll find options to open the app in a
+- [React Native](https://reactnative.dev/)
+- [Expo](https://expo.dev/)
+- [TypeScript](https://www.typescriptlang.org/)
+- [React Query](https://tanstack.com/query/v5) for data fetching and caching
+- [Axios](https://axios-http.com/) for making HTTP requests
+- [React Navigation](https://reactnavigation.org/) for navigation
+- [Eslint](https://eslint.org/) for linting
 
-- [development build](https://docs.expo.dev/develop/development-builds/introduction/)
-- [Android emulator](https://docs.expo.dev/workflow/android-studio-emulator/)
-- [iOS simulator](https://docs.expo.dev/workflow/ios-simulator/)
-- [Expo Go](https://expo.dev/go), a limited sandbox for trying out app development with Expo
+## How to Run the Project
 
-You can start developing by editing the files inside the **app** directory. This project uses [file-based routing](https://docs.expo.dev/router/introduction).
+1.  **Install Dependencies:**
+    ```bash
+    npm install
+    ```
 
-## Get a fresh project
+2.  **Run the project on different platforms:**
 
-When you're ready, run:
+    -   **Android:**
+        ```bash
+        npm run android
+        ```
 
-```bash
-npm run reset-project
+    -   **iOS:**
+        ```bash
+        npm run ios
+        ```
+
+    -   **Web:**
+        ```bash
+        npm run web
+        ```
+
+3.  **Lint the project:**
+    ```bash
+    npm run lint
+    ```
+
+## Project Structure
+
+```
+c:\Users\Aady\Desktop\post-search\
+├───.gitignore
+├───app.json
+├───eslint.config.js
+├───package-lock.json
+├───package.json
+├───README.md
+├───tsconfig.json
+├───.expo\
+│   └───types\
+├───.git\
+├───.vscode\
+│   ├───extensions.json
+│   ├───settings.json
+│   └───.react\
+├───app\
+│   ├───_layout.tsx
+│   └───index.tsx
+├───assets\
+│   └───images\
+│       ├───android-icon-background.png
+│       ├───android-icon-foreground.png
+│       ├───android-icon-monochrome.png
+│       ├───favicon.png
+│       ├───icon.png
+│       ├───partial-react-logo.png
+│       ├───react-logo.png
+│       ├───react-logo@2x.png
+│       ├───react-logo@3x.png
+│       └───splash-icon.png
+├───components\
+│   ├───external-link.tsx
+│   ├───SearchComponent.tsx
+│   ├───useInternetStatus.tsx
+│   └───posts\
+│       └───PostCard.tsx
+├───constants\
+│   └───theme.ts
+├───lib\
+│   └───queryClient.ts
+├───node_modules\
+└───services\
+    ├───index.ts
+    └───posts\
+        └───index.ts
 ```
 
-This command will move the starter code to the **app-example** directory and create a blank **app** directory where you can start developing.
+## Contributing
 
-## Learn more
-
-To learn more about developing your project with Expo, look at the following resources:
-
-- [Expo documentation](https://docs.expo.dev/): Learn fundamentals, or go into advanced topics with our [guides](https://docs.expo.dev/guides).
-- [Learn Expo tutorial](https://docs.expo.dev/tutorial/introduction/): Follow a step-by-step tutorial where you'll create a project that runs on Android, iOS, and the web.
-
-## Join the community
-
-Join our community of developers creating universal apps.
-
-- [Expo on GitHub](https://github.com/expo/expo): View our open source platform and contribute.
-- [Discord community](https://chat.expo.dev): Chat with Expo users and ask questions.
+Contributions are welcome! Please feel free to open an issue or submit a pull request.
