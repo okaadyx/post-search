@@ -3,7 +3,6 @@ import SearchComponent from "@/components/SearchComponent";
 import useInternetStatus from "@/components/useInternetStatus";
 import { queryClient } from "@/lib/queryClient";
 import { api } from "@/services";
-import { Post } from "@/services/posts/types";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
@@ -36,10 +35,13 @@ export default function HomeScreen() {
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await queryClient.invalidateQueries({ queryKey: ["posts"] });
-    await AsyncStorage.removeItem("SearchQuery");
-    setSearchQuery("");
-    setRefreshing(false);
+    try {
+      await queryClient.invalidateQueries({ queryKey: ["posts"] });
+      await AsyncStorage.removeItem("SearchQuery");
+      setSearchQuery("");
+    } finally {
+      setRefreshing(false);
+    }
   };
 
   const handleSearch = async (text: string) => {
@@ -47,14 +49,13 @@ export default function HomeScreen() {
     await AsyncStorage.setItem("SearchQuery", text);
   };
 
-  const filteredPosts: Post[] | undefined = !searchQuery.trim()
-    ? (data as Post[] | undefined)
-    : (data as Post[] | undefined)?.filter(
-        (item: { title: string; body: string }) =>
-          item.title.toLowerCase().includes(searchQuery.toLowerCase())
+  const filteredPosts = !searchQuery.trim()
+    ? data
+    : data?.filter((item: { title: string }) =>
+        item.title.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
-  if (isLoading && !data) {
+  if (isLoading) {
     return (
       <View style={styles.loading}>
         <ActivityIndicator size={"large"} />
@@ -63,13 +64,14 @@ export default function HomeScreen() {
     );
   }
 
-  if (isError && !data) {
+  if (isError) {
     return (
       <View style={styles.loading}>
         <Text>Something went wrong</Text>
       </View>
     );
   }
+
   return (
     <SafeAreaView style={styles.container}>
       <SearchComponent query={searchQuery} setQuery={handleSearch} />
